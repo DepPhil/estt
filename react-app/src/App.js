@@ -11,6 +11,7 @@ import SidebarList from "./model/renderHtml";
 import PersonSidebar from "./Componenets/PersonSidebar";
 import NewTable from "./Componenets/NewTable";
 import PopModal from "./Componenets/PopModal";
+import EditPop from "./Componenets/EditPop";
 import PostingModal from "./Componenets/PostingModal";
 import PersonModal from "./Componenets/PersonModal";
 import PromotionModal from "./Componenets/PromotionModal";
@@ -44,7 +45,7 @@ class App extends Component {
       Role: [],
       UserId: "",
       LogInMsg: "",
-      ContentPageDisplay: "", //PersonList, EditPerson, PlaceList, DocumentList
+      ContentPageDisplay: "", //PersonList, EditPerson, PlaceList, DocumentList, EditPop
       ContentPageTitle: "", //Person, Place of Posting
       ModalDisplay: "", //AddPerson, AddPlace, AddDocument, AddPosting, AddPromotion
       SidebarDisplay: "", //Database, Document, PersonSidebar
@@ -52,6 +53,7 @@ class App extends Component {
       PersonId: "",
       PostingId: "",
       PromotionId: "",
+      PopId: "",
       BackButtonText: "",
 
       currentDisplay: { name: "", data: [], posts: [], [Pop.Pop]: [] },
@@ -111,6 +113,8 @@ class App extends Component {
 
         case "EditPerson":
           return <EditPerson {...this.state} {...this.func} />;
+        case "EditPop":
+          return <EditPop {...this.state} {...this.func} />;
         default:
           break;
       }
@@ -299,6 +303,15 @@ class App extends Component {
       }
       document.getElementById("closeModal").click();
     },
+    editPopFormSubmit: () => {
+      const req = $("#editPopForm").serializeArray();
+      console.log("Edit Pop form data is: ", req);
+      data.addPop(req, res => {
+        const Pop = res;
+        const ContentPageDisplay = "PlaceList";
+        this.setState({ Pop, ContentPageDisplay });
+      });
+    },
     showRow: (title, _id, e) => {
       switch (this.state.ContentPageDisplay) {
         case "Person":
@@ -316,12 +329,13 @@ class App extends Component {
     editRow: (title, _id, e) => {
       console.log("Editing rows");
       //document.getElementById("showMyModal").click();
+      let PersonId, PopId, ContentPageDisplay, ContentPageTitle, SidebarDisplay;
       switch (this.state.ContentPageDisplay) {
         case "PersonList":
-          const PersonId = _id;
-          const ContentPageDisplay = "EditPerson";
-          const ContentPageTitle = "Edit Person";
-          const SidebarDisplay = "";
+          PersonId = _id;
+          ContentPageDisplay = "EditPerson";
+          ContentPageTitle = "Edit Person";
+          SidebarDisplay = "";
           this.setState({
             PersonId,
             ContentPageDisplay,
@@ -330,9 +344,18 @@ class App extends Component {
           });
           console.log("the Personid is: ", PersonId);
           break;
-
+        case "PlaceList":
+          PopId = _id;
+          ContentPageDisplay = "EditPop";
+          ContentPageTitle = "Edit Place of Posting";
+          this.setState({
+            PopId,
+            ContentPageDisplay,
+            ContentPageTitle
+          });
+          break;
         default:
-          console.log("the title is: ", this.state.ContentPageTitle);
+          console.log("the title is: ", this.state.ContentPageDisplay);
           break;
       }
     },

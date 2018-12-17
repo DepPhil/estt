@@ -53,6 +53,7 @@ exports.allData = callback => {
   };
   Pop.find({})
     .populate("Parent_Office")
+    .sort({ Level: 1 })
     .exec(function(err, res) {
       if (err) assert(err);
       console.log("The Pop result is row: ", res.length);
@@ -73,7 +74,7 @@ exports.allData = callback => {
               Post.find({}, (err, res) => {
                 data.Post = res;
                 Posting.find({})
-                  .sort({ PersonId: 1, Date_of_Joining: 1 })
+                  .sort({ PersonId: 1, Date_of_Joining: -1 })
                   .populate("Place_of_Relieving")
                   .populate("Place_of_Joining")
                   .exec((err, res) => {
@@ -110,13 +111,27 @@ exports.allData = callback => {
     });
 };
 exports.addPop = (data, callback) => {
-  Pop.create(data, (err, res) => {
-    if (err) assert(err);
-    console.log("added one pop in the database: ", res);
-    Pop.find({}, (err, res) => {
-      callback(res);
+  if (data.PopId != "") {
+    Pop.updateOne({ _id: data.PopId }, data, (err, res) => {
+      Pop.find({})
+        .sort({ Level: 1 })
+        .populate("Parent_Office")
+        .exec((err, res) => {
+          callback(res);
+        });
     });
-  });
+  } else {
+    Pop.create(data, (err, res) => {
+      if (err) assert(err);
+      console.log("added one pop in the database: ", res);
+      Pop.find({})
+        .sort({ Level: 1 })
+        .populate("Parent_Office")
+        .exec((err, res) => {
+          callback(res);
+        });
+    });
+  }
 };
 
 exports.addPerson = (data, callback) => {
@@ -126,12 +141,12 @@ exports.addPerson = (data, callback) => {
     if (err) assert(err);
     console.log("added one person in the database: ", res);
     const PersonId = res._id;
-    Promotion.create({ PersonId, Promotion_To }, (err, res) => {
-      console.log("Promotion entry created: ", res);
-    });
-    Posting.create({ PersonId, Place_of_Joining }, (err, res) => {
-      console.log("Posting entry created: ", res);
-    });
+    // Promotion.create({ PersonId, Promotion_To }, (err, res) => {
+    //   console.log("Promotion entry created: ", res);
+    // });
+    // Posting.create({ PersonId, Place_of_Joining }, (err, res) => {
+    //   console.log("Posting entry created: ", res);
+    // });
     Person.find({}, (err, res) => {
       callback(res);
     });
@@ -154,7 +169,7 @@ exports.updatePosting = (data, callback) => {
       if (err) assert(err);
       console.log("Created new Posting document: ", res);
       Posting.find({})
-        .sort({ PersonId: 1, Date_of_Joining: 1 })
+        .sort({ PersonId: 1, Date_of_Joining: -1 })
         .populate("Place_of_Relieving")
         .populate("Place_of_Joining")
         .exec((err, res) => {
@@ -170,7 +185,7 @@ exports.updatePosting = (data, callback) => {
       if (err) assert(err);
       console.log("Updating Posting collection: ", res);
       Posting.find({})
-        .sort({ PersonId: 1, Date_of_Joining: 1 })
+        .sort({ PersonId: 1, Date_of_Joining: -1 })
         .populate("Place_of_Relieving")
         .populate("Place_of_Joining")
         .exec((err, res) => {
@@ -239,6 +254,7 @@ exports.deletePosting = (data, callback) => {
   Posting.deleteOne({ _id: data.PostingId }, (err, res) => {
     console.log("Deleting one Posting: ", res);
     Posting.find({})
+      .sort({ PersonId: 1, Date_of_Joining: -1 })
       .populate("Place_of_Relieving")
       .populate("Place_of_Joining")
       .exec((err, res) => {

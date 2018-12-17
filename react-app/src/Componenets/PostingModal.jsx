@@ -49,7 +49,7 @@ class PostingModal extends Component {
             />
           </div>
         </div>
-        <div className="form-group row">
+        {/* <div className="form-group row">
           <label htmlFor="personnel-poj" className="col-form-label col-sm-4">
             Place of Relieving
           </label>
@@ -64,7 +64,7 @@ class PostingModal extends Component {
               {this.getParentOffice()}
             </select>
           </div>
-        </div>
+        </div> */}
         <div className="form-group row">
           <label htmlFor="personnel-doj" className="col-form-label col-sm-4">
             Date of Relieving

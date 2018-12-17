@@ -25,7 +25,12 @@ const Pop = {
   _id: "_id",
   setData: data => {
     const obj = data.map(function(item) {
-      return { [Pop.Name]: item.Name };
+      return {
+        _id: item._id,
+        [Pop.Name]: item.Name,
+        Level: item.Level,
+        "Parent Office": item.Parent_Office.Name
+      };
     });
     return obj;
   }

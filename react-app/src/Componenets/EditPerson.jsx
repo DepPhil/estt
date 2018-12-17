@@ -40,9 +40,11 @@ class EditPerson extends Component {
           <td key={posting._id + "dor"}>
             {posting.Date_of_Joining.substr(0, 10)}
           </td>
-          <td key={posting._id + "poj"}>{posting.Place_of_Relieving.Name}</td>
+          {/* <td key={posting._id + "poj"}>{posting.Place_of_Relieving.Name}</td> */}
           <td key={posting._id + "doj"}>
-            {posting.Date_of_Relieving.substr(0, 10)}
+            {posting.Date_of_Relieving.substr(0, 10) == "1900-01-01"
+              ? "NA"
+              : posting.Date_of_Relieving.substr(0, 10)}
           </td>
           <td key={posting._id + "dur"}>
             {logic.duration(posting.Date_of_Joining, posting.Date_of_Relieving)}
@@ -152,13 +154,13 @@ class EditPerson extends Component {
         {/* History of Posting */}
         <h3>History of Posting</h3>
         <div className="form-group">
-          <table className="table">
+          <table className="table table-sm">
             <thead>
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Place of Joining</th>
                 <th scope="col">Date of Joining</th>
-                <th scope="col">Place of Relieving</th>
+                {/* <th scope="col">Place of Relieving</th> */}
                 <th scope="col">Date of Relieving</th>
                 <th scope="col">Duration</th>
                 <th scope="col" />
@@ -180,7 +182,7 @@ class EditPerson extends Component {
         {/* History of Promotion */}
         <h3>History of Promotion</h3>
         <div className="form-group">
-          <table className="table">
+          <table className="table table-sm">
             <thead>
               <tr>
                 <th scope="col">#</th>

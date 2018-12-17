@@ -64,8 +64,11 @@ exports.setPerson = data => {
   return result;
 };
 exports.duration = (doj, dor) => {
+  if (dor.toString().substr(0, 10) == "1900-01-01") {
+    dor = Date.now();
+  }
   const milSec = new Date(dor) - new Date(doj);
-  const days = milSec / (1000 * 60 * 60 * 24);
+  const days = Math.round(milSec / (1000 * 60 * 60 * 24));
   return days.toString() + " Days";
 };
 
