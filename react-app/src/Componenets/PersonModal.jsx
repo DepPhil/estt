@@ -81,77 +81,111 @@ class PersonModal extends Component {
   render() {
     return (
       <div>
-        <div className="form-group row">
-          <label htmlFor="personnel-name" className="col-form-label col-sm-2">
-            Full Name
-          </label>
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className="form-control"
-              id="personnel-name"
-              name="Name"
-            />
-          </div>
-        </div>
-        <div className="form-group row">
-          <label htmlFor="inlineRadio1" className="col-form-label col-sm-2">
-            Sex
-          </label>
-          <div className="col-md-10">
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="Sex"
-                id="inlineRadio1"
-                value="Male"
-                defaultChecked
-              />
-              <label className="form-check-label" htmlFor="inlineRadio1">
-                Male
+        <div className="modal-body">
+          <form
+            id="modalForm"
+            action={this.props.ModalAction()}
+            method="post"
+            encType="multipart/form-data"
+          >
+            <div className="form-group row">
+              <label
+                htmlFor="personnel-name"
+                className="col-form-label col-sm-2"
+              >
+                Full Name
               </label>
+              <div className="col-sm-10">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="personnel-name"
+                  name="Name"
+                />
+              </div>
             </div>
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="Sex"
-                id="inlineRadio2"
-                value="Female"
-              />
-              <label className="form-check-label" htmlFor="inlineRadio2">
-                Female
+            <div className="form-group row">
+              <label htmlFor="inlineRadio1" className="col-form-label col-sm-2">
+                Sex
               </label>
+              <div className="col-md-10">
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="Sex"
+                    id="inlineRadio1"
+                    value="Male"
+                    defaultChecked
+                  />
+                  <label className="form-check-label" htmlFor="inlineRadio1">
+                    Male
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="Sex"
+                    id="inlineRadio2"
+                    value="Female"
+                  />
+                  <label className="form-check-label" htmlFor="inlineRadio2">
+                    Female
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="Sex"
+                    id="inlineRadio3"
+                    value="Other"
+                  />
+                  <label className="form-check-label" htmlFor="inlineRadio3">
+                    Other
+                  </label>
+                </div>
+              </div>
             </div>
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="Sex"
-                id="inlineRadio3"
-                value="Other"
-              />
-              <label className="form-check-label" htmlFor="inlineRadio3">
-                Other
+            <div className="form-group row">
+              <label
+                htmlFor="personnel-dob"
+                className="col-form-label col-sm-2"
+              >
+                Date of Birth
               </label>
+              <div className="col-sm-10">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="personnel-dob"
+                  placeholder="dd/mm/yyyy"
+                  name="Date_of_Birth"
+                />
+              </div>
             </div>
-          </div>
+          </form>
         </div>
-        <div className="form-group row">
-          <label htmlFor="personnel-dob" className="col-form-label col-sm-2">
-            Date of Birth
-          </label>
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className="form-control"
-              id="personnel-dob"
-              placeholder="dd/mm/yyyy"
-              name="Date_of_Birth"
-            />
-          </div>
+        <div className="modal-footer">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            data-dismiss="modal"
+            id="closeModal"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary"
+            id="modalFormSubmitBtn"
+            onClick={e => this.props.submitForm(this.props.ModalAction, e)}
+          >
+            Save
+          </button>
         </div>
+
         {/* <hr />
         <div classname="form-group">
           <label htmlFor="person-historyPosting" className="col-form-label">

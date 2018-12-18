@@ -48,6 +48,11 @@ exports.deletePerson = (PersonId, callback) => {
     callback(result);
   });
 };
+exports.deletePop = (PopId, callback) => {
+  $.post(`${ipAddress}/deletePop`, { PopId }, result => {
+    callback(result);
+  });
+};
 exports.deletePosting = (PostingId, PersonId, callback) => {
   $.post(`${ipAddress}/deletePosting`, { PostingId, PersonId }, result => {
     callback(result);

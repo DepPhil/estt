@@ -42,7 +42,7 @@ class App extends Component {
       Promotion: [],
 
       InputValidationMsg: "",
-      Role: [],
+      Role: [], //ADMIN, HOP, MIN
       UserId: "",
       LogInMsg: "",
       ContentPageDisplay: "", //PersonList, EditPerson, PlaceList, DocumentList, EditPop
@@ -145,8 +145,8 @@ class App extends Component {
       switch (this.state.ModalDisplay) {
         case "AddPerson":
           return <PersonModal {...this.state} {...this.func} />;
-        case "AddPlace":
-          return <PopModal data={this.state[Pop.Pop]} {...this.func} />;
+        case "PopModal":
+          return <PopModal {...this.state} {...this.func} />;
         case "AddDocument":
           return (
             <DocumentModal data={this.state.SidebarClickItem} {...this.func} />
@@ -183,7 +183,7 @@ class App extends Component {
             ContentPageDisplay = "PlaceList";
             ContentPageTitle = "Place of Posting";
             SidebarClickItem = item;
-            ModalDisplay = "AddPlace";
+            ModalDisplay = "PopModal";
             break;
 
           case "Person":
@@ -262,6 +262,11 @@ class App extends Component {
           return;
 
         case "AddPerson":
+          if (!logic.validateUser("MIN", this.state.Role)) {
+            document.getElementById("closeModal").click();
+            alert("Not Authorised! Please Login.");
+            return;
+          }
           result = this.func.validateDate();
           if (!result) return;
           data.addPerson(result, res => {
@@ -270,7 +275,12 @@ class App extends Component {
           });
           break;
 
-        case "AddPlace":
+        case "PopModal":
+          if (!logic.validateUser("MIN", this.state.Role)) {
+            document.getElementById("closeModal").click();
+            alert("Not Authorised! Please Login.");
+            return;
+          }
           result = this.func.validateDate();
           if (!result) return;
           data.addPop(result, res => {
@@ -279,6 +289,11 @@ class App extends Component {
           });
           break;
         case "PostingModal":
+          if (!logic.validateUser("HOP", this.state.Role)) {
+            document.getElementById("closeModal").click();
+            alert("Not Authorised! Please Login.");
+            return;
+          }
           result = this.func.validateDate();
           if (!result) return;
           data.updatePosting(result, res => {
@@ -289,6 +304,11 @@ class App extends Component {
           break;
 
         case "PromotionModal":
+          if (!logic.validateUser("HOP", this.state.Role)) {
+            document.getElementById("closeModal").click();
+            alert("Not Authorised! Please Login.");
+            return;
+          }
           result = this.func.validateDate();
           if (!result) return;
           data.updatePromotion(result, res => {
@@ -304,6 +324,11 @@ class App extends Component {
       document.getElementById("closeModal").click();
     },
     editPopFormSubmit: () => {
+      if (!logic.validateUser("MIN", this.state.Role)) {
+        document.getElementById("closeModal").click();
+        alert("Not Authorised! Please Login.");
+        return;
+      }
       const req = $("#editPopForm").serializeArray();
       console.log("Edit Pop form data is: ", req);
       data.addPop(req, res => {
@@ -329,7 +354,12 @@ class App extends Component {
     editRow: (title, _id, e) => {
       console.log("Editing rows");
       //document.getElementById("showMyModal").click();
-      let PersonId, PopId, ContentPageDisplay, ContentPageTitle, SidebarDisplay;
+      let PersonId,
+        PopId,
+        ContentPageDisplay,
+        ContentPageTitle,
+        SidebarDisplay,
+        ModalDisplay;
       switch (this.state.ContentPageDisplay) {
         case "PersonList":
           PersonId = _id;
@@ -346,13 +376,15 @@ class App extends Component {
           break;
         case "PlaceList":
           PopId = _id;
-          ContentPageDisplay = "EditPop";
-          ContentPageTitle = "Edit Place of Posting";
+          ModalDisplay = "PopModal";
+          // ContentPageDisplay = "EditPop";
+          // ContentPageTitle = "Edit Place of Posting";
+
           this.setState({
             PopId,
-            ContentPageDisplay,
-            ContentPageTitle
+            ModalDisplay
           });
+          document.getElementById("showMyModal").click();
           break;
         default:
           console.log("the title is: ", this.state.ContentPageDisplay);
@@ -360,8 +392,8 @@ class App extends Component {
       }
     },
     deleteRow: (title, id, e) => {
-      switch (this.state.ContentPageTitle) {
-        case "Person":
+      switch (this.state.ContentPageDisplay) {
+        case "PersonList":
           if (!logic.validateUser("ADMIN", this.state.Role)) {
             alert("Not authorised to delete! Please Login");
             return;
@@ -370,6 +402,23 @@ class App extends Component {
             const Person = result;
             this.setState({ Person });
           });
+
+        case "PlaceList":
+          if (!logic.validateUser("ADMIN", this.state.Role)) {
+            alert("Not authorised to delete! Please Login");
+            return;
+          }
+          data.deletePop(id, result => {
+            const Pop = result;
+            this.setState({ Pop });
+          });
+          break;
+        default:
+          console.log(
+            "The contentPageDisplay is ",
+            this.state.ContentPageDisplay
+          );
+          break;
       }
     },
     DeletePosting: (PersonId, PostingId, e) => {

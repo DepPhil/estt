@@ -249,6 +249,17 @@ exports.deletePerson = (data, callback) => {
     });
   });
 };
+exports.deletePop = (data, callback) => {
+  Pop.deleteOne({ _id: data.PopId }, (err, res) => {
+    console.log("Deleting one Pop: ", res);
+    Pop.find({})
+      .sort({ Level: 1 })
+      .populate("Parent_Office")
+      .exec((err, res) => {
+        callback(res);
+      });
+  });
+};
 exports.deletePosting = (data, callback) => {
   let result = { Posting: [], Person: [] };
   Posting.deleteOne({ _id: data.PostingId }, (err, res) => {

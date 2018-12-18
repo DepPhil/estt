@@ -111,34 +111,7 @@ function MainHtml(props) {
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <div className="modal-body">
-                    <form
-                      id="modalForm"
-                      action={props.ModalAction()}
-                      method="post"
-                      encType="multipart/form-data"
-                    >
-                      {props.ModalForm()}
-                    </form>
-                  </div>
-                  <div className="modal-footer">
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      data-dismiss="modal"
-                      id="closeModal"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      id="modalFormSubmitBtn"
-                      onClick={e => props.submitForm(props.ModalAction, e)}
-                    >
-                      Save
-                    </button>
-                  </div>
+                  {props.ModalForm()}
                 </div>
               </div>
             </div>

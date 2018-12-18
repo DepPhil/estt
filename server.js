@@ -7,7 +7,7 @@ const multer = require("multer");
 const app = express();
 debug("server is initilising");
 const data = require("./data/data");
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, "build")));
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
     cb(null, path.join(__dirname, "uploads"));
@@ -93,6 +93,12 @@ app.post("/updatePromotion", cors(), function(req, res) {
 app.post("/deletePerson", cors(), function(req, res) {
   console.log("the delete request for Person is: ", req.body);
   data.deletePerson(req.body, result => {
+    res.status(200).send(result);
+  });
+});
+app.post("/deletePop", cors(), function(req, res) {
+  console.log("the delete request for Pop is: ", req.body);
+  data.deletePop(req.body, result => {
     res.status(200).send(result);
   });
 });
