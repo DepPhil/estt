@@ -1,29 +1,51 @@
 import React, { Component } from "react";
 
-const PersonSidebar = props => {
-  const handleChange = e => {
-    console.log("The checkbox change is: ", e.target.value, e.target.name);
+class PersonSidebar extends Component {
+  state = { post: "" };
+  getPost = () => {
+    return this.props.Post.map(item => (
+      <option key={item._id} value={item._id}>
+        {item.Name}
+      </option>
+    ));
   };
-  return (
-    <div>
-      <p className="h6">
-        <u>Show</u>
-      </p>
+  changePost = e => {
+    if (e.target.value == "All") this.props.filterPost("All");
+    else {
+      this.props.filterPost(
+        this.props.Post.find(i => i._id == e.target.value).Name
+      );
+    }
 
-      <div className="form-check">
-        <input
-          className="form-check-input"
-          type="checkbox"
-          value=""
-          id="defaultCheck1"
-          name="Date_of_Birth"
-          onChange={handleChange}
-        />
-        <label className="form-check-label" htmlfor="defaultCheck1">
-          Date of Birth
-        </label>
+    this.setState({ post: e.target.value });
+  };
+
+  render() {
+    return (
+      <div>
+        <p className="h6">
+          <u>Filter By</u>
+        </p>
+
+        <div className="form-check">
+          <label htmlFor="promotionTo" className="col-form-label col-sm-4">
+            <h6>Post</h6>
+          </label>
+
+          <select
+            className="form-control"
+            id="promotionTo"
+            name="Promotion_To"
+            value={this.state.post}
+            onChange={this.changePost}
+          >
+            <option value="All">All</option>
+            {this.getPost()}
+          </select>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
+
 export default PersonSidebar;

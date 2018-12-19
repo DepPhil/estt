@@ -55,6 +55,7 @@ class App extends Component {
       PromotionId: "",
       PopId: "",
       BackButtonText: "",
+      Filter: { Post: "" },
 
       currentDisplay: { name: "", data: [], posts: [], [Pop.Pop]: [] },
       contentPage: { title: "", personnel: [], posts: [], pops: [] },
@@ -84,6 +85,8 @@ class App extends Component {
               {...this.func}
             />
           );
+        case "PersonSidebar":
+          return <PersonSidebar {...this.state} {...this.func} />;
         default:
           break;
       }
@@ -93,7 +96,7 @@ class App extends Component {
         case "PersonList":
           return (
             <NewTable
-              data={logic.setPerson(this.state.Person)}
+              data={logic.setPerson(this.state.Person, this.state.Filter)}
               {...this.func}
             />
           );
@@ -176,7 +179,11 @@ class App extends Component {
       this.setState({ SidebarDisplay, BackButtonText });
     },
     sidebarClick: (item, e) => {
-      let ContentPageDisplay, ContentPageTitle, SidebarClickItem, ModalDisplay;
+      let ContentPageDisplay,
+        ContentPageTitle,
+        SidebarClickItem,
+        ModalDisplay,
+        SidebarDisplay;
       if (item.Parent === "Database") {
         switch (item.Name) {
           case "Place of Posting":
@@ -191,6 +198,7 @@ class App extends Component {
             ContentPageTitle = "Person";
             SidebarClickItem = item;
             ModalDisplay = "AddPerson";
+            SidebarDisplay = "PersonSidebar";
             break;
 
           default:
@@ -207,7 +215,8 @@ class App extends Component {
         ContentPageDisplay,
         ContentPageTitle,
         SidebarClickItem,
-        ModalDisplay
+        ModalDisplay,
+        SidebarDisplay
       });
     },
     GoBack: () => {
@@ -480,6 +489,12 @@ class App extends Component {
       validationText: () => {
         return this.state.InputValidationMsg;
       }
+    },
+    filterPost: PostName => {
+      let Filter;
+      if (PostName == "All") Filter = { Post: "" };
+      else Filter = { Post: PostName };
+      this.setState({ Filter });
     }
   }; // func
   documentClick = (action, _id, e) => {

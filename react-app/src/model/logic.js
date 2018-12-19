@@ -50,7 +50,7 @@ exports.validateUser = (role, roles) => {
   return true;
 };
 
-exports.setPerson = data => {
+exports.setPerson = (data, filter) => {
   let result = [];
   result = data.map(person => {
     return {
@@ -60,8 +60,10 @@ exports.setPerson = data => {
       Place_of_Posting: person.Posting
     };
   });
-  console.log("Data set for Person: ", result);
-  return result;
+  if (filter.Post == "") return result;
+  const res = result.filter(i => i.Post == filter.Post);
+  console.log("Data set for Person: ", res);
+  return res;
 };
 exports.duration = (doj, dor) => {
   if (dor.toString().substr(0, 10) == "1900-01-01") {

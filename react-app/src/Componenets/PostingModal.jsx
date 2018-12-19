@@ -2,6 +2,14 @@ import React, { Component } from "react";
 
 class PostingModal extends Component {
   state = { poj: "", por: "", doj: "", dor: "" };
+  submitForm = e => {
+    this.resetState();
+    this.props.submitForm(this.props.ModalAction, e);
+  };
+  resetState = () => {
+    const state = { poj: "", por: "", doj: "", dor: "" };
+    this.setState({ ...state });
+  };
   getParentOffice = () => {
     const pop = this.props.Pop.filter(item => item.Level == 3);
     return pop.map(item => (
@@ -11,8 +19,8 @@ class PostingModal extends Component {
     ));
   };
   dorValue = () => {
+    if (this.props.PostingId == "") return "";
     const val = this.props.Posting.find(i => i._id == this.props.PostingId);
-    if (val == null) return "";
     const date = new Date(val.Date_of_Relieving);
     const year = date.getFullYear().toString();
     const month = (date.getMonth() + 1).toString();
@@ -20,8 +28,8 @@ class PostingModal extends Component {
     return day + "-" + month + "-" + year;
   };
   dojValue = () => {
+    if (this.props.PostingId == "") return "";
     const val = this.props.Posting.find(i => i._id == this.props.PostingId);
-    if (val == null) return "";
     const date = new Date(val.Date_of_Joining);
     const year = date.getFullYear().toString();
     const month = (date.getMonth() + 1).toString();
@@ -29,15 +37,8 @@ class PostingModal extends Component {
     return day + "-" + month + "-" + year;
   };
   pojValue = () => {
-    console.log(
-      "PostingModal: DoJ: %s, DoR: %s, PoJ: %s, PostingId: %s",
-      this.state.doj,
-      this.state.dor,
-      this.state.poj,
-      this.props.PostingId
-    );
+    if (this.props.PostingId == "") return "";
     const val = this.props.Posting.find(i => i._id == this.props.PostingId);
-    if (val == null) return "";
     return val.Place_of_Joining._id;
   };
   changePoj = e => this.setState({ poj: e.target.value });
@@ -69,11 +70,7 @@ class PostingModal extends Component {
                   name="Place_of_Joining"
                   //defaultValue={this.pojValue()}
                   value={
-                    this.props.PostingId != ""
-                      ? this.props.Posting.find(
-                          i => i._id == this.props.PostingId
-                        ).Place_of_Joining._id
-                      : this.state.poj
+                    this.state.poj == "" ? this.pojValue() : this.state.poj
                   }
                   onChange={this.changePoj}
                 >
@@ -96,9 +93,7 @@ class PostingModal extends Component {
                   name="Date_of_Joining"
                   //defaultValue={this.dojValue()}
                   value={
-                    this.props.PostingId != ""
-                      ? this.dojValue()
-                      : this.state.doj
+                    this.state.doj == "" ? this.dojValue() : this.state.doj
                   }
                   onChange={this.changeDoj}
                 />
@@ -135,9 +130,7 @@ class PostingModal extends Component {
                   name="Date_of_Relieving"
                   // defaultValue={this.dorValue()}
                   value={
-                    this.props.PostingId != ""
-                      ? this.dorValue()
-                      : this.state.dor
+                    this.state.dor == "" ? this.dorValue() : this.state.dor
                   }
                   onChange={this.changeDor}
                 />
@@ -167,6 +160,7 @@ class PostingModal extends Component {
             className="btn btn-secondary"
             data-dismiss="modal"
             id="closeModal"
+            onClick={this.resetState}
           >
             Cancel
           </button>
@@ -174,7 +168,7 @@ class PostingModal extends Component {
             type="button"
             className="btn btn-primary"
             id="modalFormSubmitBtn"
-            onClick={e => this.props.submitForm(this.props.ModalAction, e)}
+            onClick={e => this.submitForm(e)}
           >
             Save
           </button>
