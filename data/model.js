@@ -55,7 +55,9 @@ const personSchema = new Schema({
     default: new Date()
   }
 });
-
+personSchema.pre("find", function() {
+  this.sort({ Name: 1 });
+});
 const postingSchema = new Schema({
   PersonId: {
     type: Schema.Types.ObjectId,

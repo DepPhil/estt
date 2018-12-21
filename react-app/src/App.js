@@ -55,7 +55,7 @@ class App extends Component {
       PromotionId: "",
       PopId: "",
       BackButtonText: "",
-      Filter: { Post: "" },
+      Filter: { Post: "", Posting: "" },
 
       currentDisplay: { name: "", data: [], posts: [], [Pop.Pop]: [] },
       contentPage: { title: "", personnel: [], posts: [], pops: [] },
@@ -492,9 +492,20 @@ class App extends Component {
     },
     filterPost: PostName => {
       let Filter;
-      if (PostName == "All") Filter = { Post: "" };
-      else Filter = { Post: PostName };
+      if (PostName == "All")
+        Filter = { Post: "", Posting: this.state.Filter.Posting };
+      else Filter = { Post: PostName, Posting: this.state.Filter.Posting };
       this.setState({ Filter });
+    },
+    filterPosting: PostingName => {
+      let Filter;
+      if (PostingName == "All")
+        Filter = { Posting: "", Post: this.state.Filter.Post };
+      else Filter = { Posting: PostingName, Post: this.state.Filter.Post };
+      this.setState({ Filter });
+      // this.setState(state => {
+      //   return { Filter, ...state.Filter };
+      // });
     }
   }; // func
   documentClick = (action, _id, e) => {

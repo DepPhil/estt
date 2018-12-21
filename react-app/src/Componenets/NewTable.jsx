@@ -14,7 +14,7 @@ function NewTable(props) {
         scope="col"
         className={heading === "_id" ? "hideColumn" : ""}
       >
-        {heading.replace("_", " ")}
+        {heading.replace(/_/g, " ")}
       </th>
     ));
   };

@@ -60,10 +60,14 @@ exports.setPerson = (data, filter) => {
       Place_of_Posting: person.Posting
     };
   });
-  if (filter.Post == "") return result;
-  const res = result.filter(i => i.Post == filter.Post);
-  console.log("Data set for Person: ", res);
-  return res;
+  if (filter.Posting != "") {
+    result = result.filter(i => i.Place_of_Posting == filter.Posting);
+  }
+  if (filter.Post != "") {
+    result = result.filter(i => i.Post == filter.Post);
+  }
+  console.log("Person result is: ", result);
+  return result;
 };
 exports.duration = (doj, dor) => {
   if (dor.toString().substr(0, 10) == "1900-01-01") {

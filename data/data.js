@@ -299,8 +299,14 @@ exports.deletePromotion = (data, callback) => {
 };
 exports.logInUser = (data, callback) => {
   User.findOne({ UserId: data.UserId }, (err, res) => {
-    if (res == null) callback(false);
-    if (res.Password != data.Password) callback(false);
+    if (res == null) {
+      callback(false);
+      return;
+    }
+    if (res.Password != data.Password) {
+      callback(false);
+      return;
+    }
     callback({ UserId: res.UserId, Role: res.Role });
   });
 };
